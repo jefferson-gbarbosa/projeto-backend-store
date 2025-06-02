@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+
+# Variáveis de ambiente
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Banco de dados local (se usar SQLite em testes, por exemplo)
+*.sqlite
+*.sqlite3
+
+# Pasta de build ou cache (se houver)
+dist/
+.cache/
+
+# Arquivos de coverage de testes
+coverage/
