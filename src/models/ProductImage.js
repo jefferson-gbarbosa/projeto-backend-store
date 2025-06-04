@@ -23,8 +23,12 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      path: {
-        type: DataTypes.STRING,
+      content: {
+        type: DataTypes.TEXT('long'),  // para base64 ou dados grandes
+        allowNull: false,
+      },
+      type: {
+        type: DataTypes.STRING,  // para guardar o tipo mime, ex: image/png
         allowNull: false,
       },
     },

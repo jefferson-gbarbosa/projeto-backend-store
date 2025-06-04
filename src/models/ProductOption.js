@@ -44,7 +44,7 @@ module.exports = (sequelize) => {
         allowNull: true,
         defaultValue: 'text',
       },
-      values: {
+      value: {
         type: DataTypes.STRING,
         allowNull: false,
       },

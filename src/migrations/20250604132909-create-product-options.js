@@ -1,8 +1,9 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('product_images', {
+    await queryInterface.createTable('product_options', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -13,33 +14,49 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'products', 
+          model: 'products',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      path: {
+      title: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      enabled: {
-        type: Sequelize.BOOLEAN,
+      shape: {
+        type: Sequelize.ENUM('square', 'circle'),
         allowNull: true,
-        defaultValue: false,
+        defaultValue: 'square',
+      },
+      radius: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: 0,
+      },
+      type: {
+        type: Sequelize.ENUM('text', 'color'),
+        allowNull: true,
+        defaultValue: 'text',
+      },
+      value: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW'),
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW'),
       },
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('product_images');
+    await queryInterface.dropTable('product_options');
   },
 };
