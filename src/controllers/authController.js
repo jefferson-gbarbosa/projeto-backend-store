@@ -18,13 +18,13 @@ module.exports.createUser = async(req, res) => {
     }
     
 
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
    
     await User.create({
       firstname,
       surname,
       email,
-      password
+      password: hashedPassword
     });
 
     return res.status(201).json({ message: 'Usuário criado com sucesso' });

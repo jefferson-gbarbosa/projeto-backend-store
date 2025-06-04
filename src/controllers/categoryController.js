@@ -64,12 +64,14 @@ module.exports.getCategoryById = async (req, res) => {
 module.exports.createCategory = async (req, res) => {
   const { name, slug, use_in_menu } = req.body;
   
-  if (!name || !slug || typeof use_in_menu !== 'boolean') {
+ if (!name || typeof slug !== 'string' || slug.length === 0 || typeof use_in_menu !== 'boolean') {
+  
+    console.log('Dados inválidos detectados, retornando 400');
     return res.status(400).json({ error: 'Dados inválidos para cadastro' });
   }
 
   try {
-    const category = await Category.create({ name, slug, use_in_menu });
+    const category = await Category.create(req.body);
     return res.status(201).json(category);
   } catch (error) {
     return res.status(500).json({ error: 'Erro ao cadastrar categoria' });

@@ -1,8 +1,5 @@
-const fs = require('fs');
-const path = require('path');
 const { Op } = require('sequelize');
 const { Product, Category, ProductImage, ProductOption } = require('../config/sequelize');
-const { v4: uuidv4 } = require('uuid');
 
 module.exports.createProduct = async (req, res) => {
   const t = await Product.sequelize.transaction();
