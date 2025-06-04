@@ -43,7 +43,7 @@ module.exports.loginUser = async(req, res) =>{
 
     if (!user) return res.status(400).json({ message: 'Credenciais inválidas' });
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await user.checkPassword(password);
 
     if (!passwordMatch) return res.status(400).json({ message: 'Credenciais inválidas' });
     const token = jwt.sign({ id: user.id, email: user.email },process.env.SECRET, { expiresIn: '1d' });

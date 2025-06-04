@@ -136,17 +136,16 @@ describe('User Controller', () => {
       const fakeUser = {
         id: 1,
         email: 'teste@email.com',
-        get: jest.fn().mockReturnValue('hashed_password'),
+        checkPassword: jest.fn().mockResolvedValue(true),
       };
-      User.findOne.mockResolvedValue(fakeUser);
-      bcrypt.compare.mockResolvedValue(true);
-      jwt.sign.mockReturnValue('token_fake');
+      User.findOne = jest.fn().mockResolvedValue(fakeUser);
+      jwt.sign = jest.fn().mockReturnValue('token_fake');
 
       mockRequest.body = { email: 'teste@email.com', password: 'senha123' };
       await userController.loginUser(mockRequest, mockResponse);
 
       expect(User.findOne).toHaveBeenCalledWith({ where: { email: 'teste@email.com' } });
-      expect(bcrypt.compare).toHaveBeenCalledWith('senha123', 'hashed_password');
+      expect(fakeUser.checkPassword).toHaveBeenCalledWith('senha123'); 
       expect(jwt.sign).toHaveBeenCalled();
       expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith({ token: 'token_fake' });
@@ -162,19 +161,20 @@ describe('User Controller', () => {
     });
 
     it('deve retornar 400 se senha inválida', async () => {
-      const fakeUser = {
-        id: 1,
-        email: 'teste@email.com',
-        get: jest.fn().mockReturnValue('hashed_password'),
-      };
-      User.findOne.mockResolvedValue(fakeUser);
-      bcrypt.compare.mockResolvedValue(false);
+    const fakeUser = {
+      id: 1,
+      email: 'teste@email.com',
+      checkPassword: jest.fn().mockResolvedValue(false), // mocka falso para senha errada
+    };
 
-      mockRequest.body = { email: 'teste@email.com', password: 'senhaErrada' };
-      await userController.loginUser(mockRequest, mockResponse);
+    User.findOne = jest.fn().mockResolvedValue(fakeUser);
 
-      expect(mockResponse.status).toHaveBeenCalledWith(400);
-      expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Credenciais inválidas' });
+    mockRequest.body = { email: 'teste@email.com', password: 'senhaErrada' };
+    await userController.loginUser(mockRequest, mockResponse);
+
+    expect(fakeUser.checkPassword).toHaveBeenCalledWith('senhaErrada');
+    expect(mockResponse.status).toHaveBeenCalledWith(400);  // aqui espera 400
+    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Credenciais inválidas' });
     });
 
     it('deve retornar 500 em caso de erro inesperado', async () => {
