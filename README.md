@@ -131,11 +131,11 @@ Execute o conjunto de testes com:
 
 ### 🤝 Contribuição
 
-  1 - Bifurque o projeto
-  2 - Crie seu branch de funcionalidade (git checkout -b feature/AmazingFeature)
-  3 - Commit suas alterações (git commit -m 'Add some AmazingFeature')
-  4 -Envie para o branch (git push origin feature/AmazingFeature)
-  5 - Abra um Pull Request
+  1. Bifurque o projeto
+  2. Crie seu branch de funcionalidade (git checkout -b feature/AmazingFeature)
+  3. Commit suas alterações (git commit -m 'Add some AmazingFeature')
+  4. Envie para o branch (git push origin feature/AmazingFeature)
+  5. Abra um Pull Request
 
 ## Documentação da API (Swagger)
 
