@@ -17,11 +17,10 @@ Projeto **CRUD**: API RESTful seguindo conceito **MVC** utilizando Stack **NodeJ
 
 Pacotes principais: **Express** responsável pela criação de rotas, Middleware **JWT** para persistência do token por 24 horas, mantendo a segurança e credêncial do usuário, ORM **Sequelize** para conexão com banco de dados relacional (**MySQL**) e por fim, **Jest** para realização de tests.
 
-## ✨ Tecnologias Utilizadas
+## ✨ Requisitos
 
 - **Autenticação de Usuário**: Sistema de autenticação seguro baseado em JWT
 - **Gerenciamento de Produtos**: Operações CRUD completas para produtos
-- **Processamento de Pedidos**: Gerenciamento completo do ciclo de vida do pedido
 - **ORM de Banco de Dados**: Sequelize para interações com o banco de dados MySQL
 - **Documentação da API**: Interface de Usuário Swagger Integrada
 - **Conjunto de Testes**: Jest para testes abrangentes de API
@@ -125,9 +124,7 @@ Execute o conjunto de testes com:
           │     ├── models/
           │     ├── routes/
           │     └── server.js 
-          │
           ├── tests/ # Testes automatizados
-          │ └── integration/ 
           ├── .env.example # Template de variáveis
           └── package.json # Dependências e scripts     
 ```
