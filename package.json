@@ -18,7 +18,10 @@
     "mysql2": "^3.14.1",
     "projeto-backend": "file:",
     "sequelize": "^6.37.7",
-    "uuid": "^11.1.0"
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.1.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",

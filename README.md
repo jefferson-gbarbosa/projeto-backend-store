@@ -139,4 +139,4 @@ Execute o conjunto de testes com:
 
 ## Documentação da API (Swagger)
 
-Para documentação da API, acesse o link: 
+Para documentação da API, acesse o link: [http://localhost:3000/api-docs/](http://localhost:3000/api-docs/)

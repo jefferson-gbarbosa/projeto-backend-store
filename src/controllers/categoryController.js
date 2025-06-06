@@ -16,6 +16,10 @@ module.exports.search = async (req, res) => {
       limit: parseInt(limit) === -1 ? undefined : parseInt(limit),
     };
 
+    if(!limit){
+      return res.status(400).json({ error: 'Parâmetros inválidos: limit ou page' });
+    }
+
     if (use_in_menu !== undefined) {
       queryOptions.where.use_in_menu = use_in_menu === 'true';
     }
@@ -63,7 +67,7 @@ module.exports.getCategoryById = async (req, res) => {
 
 module.exports.createCategory = async (req, res) => {
   const { name, slug, use_in_menu } = req.body;
-  
+ 
  if (!name || typeof slug !== 'string' || slug.length === 0 || typeof use_in_menu !== 'boolean') {
   
     console.log('Dados inválidos detectados, retornando 400');

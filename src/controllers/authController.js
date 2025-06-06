@@ -17,7 +17,6 @@ module.exports.createUser = async(req, res) => {
       return res.status(400).json({ message: 'Email já está em uso' });
     }
     
-
     const hashedPassword = await bcrypt.hash(password, 10);
    
     await User.create({
@@ -92,7 +91,7 @@ module.exports.updateUser = async (req, res) => {
 
     await user.update({ firstname, surname, email });
 
-    return res.status(204).send({ id: user.id, firstname, surname, email }); 
+    return res.status(204).send(); 
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Erro ao atualizar usuário' });
