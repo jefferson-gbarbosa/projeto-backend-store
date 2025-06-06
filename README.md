@@ -139,4 +139,7 @@ Execute o conjunto de testes com:
 
 ## Documentação da API (Swagger)
 
-Para documentação da API, acesse o link: [http://localhost:3000/api-docs/](http://localhost:3000/api-docs/)
+Para acessar a documentação completa da API localmente, execute o servidor da aplicação e acesse no seu navegador o seguinte endereço:
+http://localhost:3000/api-docs/
+
+Essa página apresenta todos os endpoints disponíveis, seus métodos, parâmetros, exemplos de requisição e resposta, facilitando a compreensão e o uso da API.

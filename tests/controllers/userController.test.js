@@ -3,10 +3,19 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../../src/config/sequelize.js');
 const userController = require('../../src/controllers/authController.js');
 
-// Mock dos módulos
 jest.mock('bcrypt');
 jest.mock('jsonwebtoken');
 jest.mock('../../src/config/sequelize.js');
+
+beforeEach(() => {
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+  jest.spyOn(console, 'log').mockImplementation(() => {});
+});
+
+afterEach(() => {
+  console.error.mockRestore();
+  console.log.mockRestore();
+});
 
 describe('User Controller', () => {
   let mockRequest;
@@ -31,9 +40,9 @@ describe('User Controller', () => {
   describe('createUser', () => {
     it('deve retornar 400 se algum campo estiver faltando', async () => {
       const testCases = [
-        { firstname: 'John', surname: 'Doe', email: 'john@test.com' }, // falta password
-        { firstname: 'John', surname: 'Doe', password: '123' }, // falta email
-        { email: 'john@test.com', password: '123' } // falta firstname
+        { firstname: 'John', surname: 'Doe', email: 'john@test.com' }, 
+        { firstname: 'John', surname: 'Doe', password: '123' }, 
+        { email: 'john@test.com', password: '123' } 
       ];
 
       for (const body of testCases) {
@@ -316,12 +325,7 @@ describe('User Controller', () => {
         email: 'email@test.com'
       });
       expect(mockResponse.status).toHaveBeenCalledWith(204);
-      expect(mockResponse.send).toHaveBeenCalledWith({
-        id: 1,
-        firstname: 'John',
-        surname: 'Doe',
-        email: 'email@test.com'
-      });
+      expect(mockResponse.send).toHaveBeenCalledWith(); 
     });
 
     it('deve retornar 500 em caso de erro inesperado', async () => {

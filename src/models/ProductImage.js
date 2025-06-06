@@ -24,11 +24,11 @@ module.exports = (sequelize) => {
         defaultValue: false,
       },
       content: {
-        type: DataTypes.TEXT('long'),  // para base64 ou dados grandes
+        type: DataTypes.TEXT('long'), 
         allowNull: false,
       },
       type: {
-        type: DataTypes.STRING,  // para guardar o tipo mime, ex: image/png
+        type: DataTypes.STRING,  
         allowNull: false,
       },
     },

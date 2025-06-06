@@ -12,21 +12,17 @@ const sequelize = new Sequelize(
   }
 );
 
-// Importa os modelos e guarda em variáveis
 const User = require('../models/User')(sequelize);
 const Category = require('../models/Category')(sequelize);
 const Product = require('../models/Product')(sequelize);
 const ProductImage = require('../models/ProductImage')(sequelize);
 const ProductOption = require('../models/ProductOption')(sequelize);
 
-
-// Executa as associações (se definidas nos modelos)
 if (User.associate) User.associate(sequelize.models);
 if (Category.associate) Category.associate(sequelize.models);
 if (Product.associate) Product.associate(sequelize.models);
 if (ProductImage.associate) ProductImage.associate(sequelize.models);
 if (ProductOption.associate) ProductOption.associate(sequelize.models);
-
 
 const connectDB = async () => {
   try {

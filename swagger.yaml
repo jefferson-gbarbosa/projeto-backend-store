@@ -275,36 +275,41 @@ paths:
         500:
           description: Erro interno ao deletar usuário.
 
-  /v1/category/categories:
+  /v1/category/search:
     get:
-      tags: [Categorias]
-      summary: Lista categorias com paginação, filtros e seleção de campos.
+      summary: Obter lista de categorias
+      description: Retorna uma lista de categorias com suporte a paginação, filtro por uso no menu e seleção de campos específicos.
+      tags:
+        - Categorias
       parameters:
-        - name: limit
-          in: query
-          description: Número de itens por página. Use `-1` para desativar a paginação.
+        - in: query
+          name: limit
           schema:
             type: integer
             default: 12
-        - name: page
-          in: query
-          description: Número da página a ser retornada.
+            example: -1
+          description: Número de itens por página. Use -1 para retornar todos.
+        - in: query
+          name: page
           schema:
             type: integer
             default: 1
-        - name: use_in_menu
-          in: query
-          description: Filtra categorias que estão ou não no menu.
-          schema:
-            type: boolean
-        - name: fields
-          in: query
-          description: "Lista de campos separados por vírgula para retornar (ex: id,name)."
+          description: Número da página para paginação. Ignorado se `limit = -1`.
+        - in: query
+          name: fields
           schema:
             type: string
+            example: name,slug
+          description: Lista separada por vírgulas dos campos a serem retornados.
+        - in: query
+          name: use_in_menu
+          schema:
+            type: boolean
+            example: true
+          description: Filtrar categorias que devem aparecer no menu.
       responses:
-        200:
-          description: Lista de categorias.
+        '200':
+          description: Lista de categorias retornada com sucesso
           content:
             application/json:
               schema:
@@ -313,23 +318,37 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Category'
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        slug:
+                          type: string
+                        use_in_menu:
+                          type: boolean
                   total:
                     type: integer
-                    example: 42
+                    example: 10
                   limit:
                     type: integer
-                    example: 12
+                    example: -1
                   page:
                     type: integer
                     example: 1
-        400:
-          description: Erro na requisição.
-        401:
-          description: Parâmetros inválidos
-        500:
-          description: Erro interno do servidor.
+        '400':
+          description: Requisição com parâmetros inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Parâmetros inválidos:limit ou page
 
+  /v1/category/create-category:
     post:
       tags: [Categorias]
       summary: Cria uma nova categoria.
@@ -427,7 +446,7 @@ paths:
         500:
           description: Erro interno do servidor.
 
-  /v1/product/products:
+  /v1/product/create-product:
     post:
       tags: [Produtos]
       summary: Criar novo produto
@@ -447,6 +466,7 @@ paths:
         401:
           description: Não autorizado.Token não fornecido.
 
+  /v1/product/search:
     get:
       tags: [Produtos]
       summary: Buscar produtos com filtros

@@ -1,6 +1,16 @@
 const { Product, Category, ProductImage, ProductOption } = require('../../src/config/sequelize.js');
 const productController = require('../../src/controllers/productController.js');
 
+beforeEach(() => {
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+  jest.spyOn(console, 'log').mockImplementation(() => {});
+});
+
+afterEach(() => {
+  console.error.mockRestore();
+  console.log.mockRestore();
+});
+
 describe('createProduct', () => {
   const commit = jest.fn();
   const rollback = jest.fn();

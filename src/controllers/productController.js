@@ -22,7 +22,6 @@ module.exports.createProduct = async (req, res) => {
       throw new Error('Nome e slug são obrigatórios.');
     }
 
-    // Criar produto
     const newProduct = await Product.create({
       enabled,
       name,
@@ -33,7 +32,6 @@ module.exports.createProduct = async (req, res) => {
       price_with_discount,
     }, { transaction: t });
 
-    // Verificar se todas as categorias existem
     if (Array.isArray(category_ids) && category_ids.length > 0) {
       const existingCategories = await Category.findAll({
         where: { id: category_ids }
@@ -53,16 +51,15 @@ module.exports.createProduct = async (req, res) => {
         await ProductImage.create({
           product_id: newProduct.id,
           content: base64Data,
-          type: img.type, // ex: image/png
+          type: img.type, 
           enabled: true,
         }, { transaction: t });
       }
     }
 
-    // Criar opções
     if (Array.isArray(options)) {
       for (const opt of options) {
-        const values = opt.values || opt.value || []; // aceitar ambos
+        const values = opt.values || opt.value || []; 
         for (const val of values) {
           await ProductOption.create({
             product_id: newProduct.id,
@@ -107,13 +104,11 @@ module.exports.searchProducts = async (req, res) => {
       distinct: true,
     };
 
-    // Paginação
     if (limitNum !== -1) {
       queryOptions.limit = limitNum;
       queryOptions.offset = (pageNum - 1) * limitNum;
     }
 
-    // Filtro textual (name ou description)
     if (match) {
       queryOptions.where[Op.or] = [
         { name: { [Op.like]: `%${match}%` } },
@@ -121,7 +116,6 @@ module.exports.searchProducts = async (req, res) => {
       ];
     }
 
-    // Filtro faixa de preço
     if (priceRange) {
       const [min, max] = priceRange.split('-').map(Number);
       if (!isNaN(min) && !isNaN(max)) {
@@ -129,7 +123,6 @@ module.exports.searchProducts = async (req, res) => {
       }
     }
 
-    // Filtro por categorias (ids múltiplos)
     if (category_ids) {
       const ids = category_ids.split(',').map(Number);
       queryOptions.include.push({
@@ -140,7 +133,6 @@ module.exports.searchProducts = async (req, res) => {
         required: true,
       });
     } else {
-      // Incluir categorias para pegar depois só os ids
       queryOptions.include.push({
         model: Category,
         as: 'categories',
@@ -149,14 +141,12 @@ module.exports.searchProducts = async (req, res) => {
       });
     }
 
-    // Filtro por opções (option[45]=GG,PP)
     if (option) {
       Object.entries(option).forEach(([optionId, values]) => {
         queryOptions.include.push({
           model: ProductOption,
           as: 'options',
           where: {
-            // Não existe option_id no seu modelo? Usar 'id' talvez? Confirmar seu campo chave.
             id: Number(optionId),
             value: { [Op.in]: values.split(',') },
           },
@@ -170,17 +160,14 @@ module.exports.searchProducts = async (req, res) => {
       });
     }
 
-    // Sempre incluir imagens
     queryOptions.include.push({
       model: ProductImage,
       as: 'images',
       required: false,
     });
 
-    // Buscar produtos
     const { rows, count } = await Product.findAndCountAll(queryOptions);
 
-    // Campos permitidos para retorno (definidos no requisito)
     const defaultFields = [
       'id',
       'enabled',
@@ -197,11 +184,9 @@ module.exports.searchProducts = async (req, res) => {
 
     const selectedFields = fields ? fields.split(',') : defaultFields;
 
-    // Montar resposta filtrando campos
     const data = rows.map((product) => {
       const p = product.toJSON();
 
-      // Construir objeto com campos filtrados
       const obj = {};
 
       for (const field of selectedFields) {
@@ -213,7 +198,7 @@ module.exports.searchProducts = async (req, res) => {
           case 'images':
             obj.images = (p.images || []).map((img) => ({
               id: img.id,
-              content: img.content || img.path || '', // ajustar para URL correta
+              content: img.content || img.path || '', 
             }));
             break;
 
@@ -299,8 +284,7 @@ module.exports.updateProduct = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: 'Produto não encontrado.' });
     }
-
-    // Atualiza dados principais
+s
     await product.update({
       enabled,
       name,
@@ -311,7 +295,6 @@ module.exports.updateProduct = async (req, res) => {
       price_with_discount,
     }, { transaction: t });
 
-    // Atualiza categorias
     if (Array.isArray(category_ids)) {
       const existingCategories = await Category.findAll({
         where: { id: category_ids }
@@ -324,7 +307,6 @@ module.exports.updateProduct = async (req, res) => {
       await product.setCategories(category_ids, { transaction: t });
     }
 
-    // Atualiza imagens
     for (const img of images) {
       if (img.deleted && img.id) {
         await ProductImage.destroy({ where: { id: img.id, product_id: productId }, transaction: t });
@@ -345,14 +327,13 @@ module.exports.updateProduct = async (req, res) => {
       }
     }
 
-    // Atualiza opções
     for (const opt of options) {
       const values = opt.values || opt.value || [];
 
       if (opt.deleted && opt.id) {
         await ProductOption.destroy({ where: { id: opt.id, product_id: productId }, transaction: t });
       } else if (opt.id) {
-        // Atualiza valor e radius (pode haver múltiplos valores para mesma opção)
+
         await ProductOption.destroy({ where: { id: opt.id, product_id: productId }, transaction: t });
 
         for (const val of values) {
@@ -366,7 +347,6 @@ module.exports.updateProduct = async (req, res) => {
           }, { transaction: t });
         }
       } else {
-        // Novo grupo de opções
         for (const val of values) {
           await ProductOption.create({
             product_id: productId,
@@ -401,7 +381,7 @@ module.exports.deleteProduct = async (req, res) => {
 
     await product.destroy();
 
-    return res.status(204).send(); // Sucesso, sem conteúdo
+    return res.status(204).send(); 
   } catch (error) {
     console.error('Erro ao deletar produto:', error.message);
     return res.status(500).json({ message: 'Erro ao deletar produto.' });
@@ -412,20 +392,14 @@ module.exports.serveProductImage = async (req, res) => {
   try {
     const { imageId } = req.params;
 
-    // Buscar imagem no banco
     const image = await ProductImage.findByPk(imageId);
 
     if (!image) {
       return res.status(404).json({ message: 'Imagem não encontrada.' });
     }
 
-    // Converter base64 para buffer
     const imgBuffer = Buffer.from(image.content, 'base64');
-
-    // Definir Content-Type do response
     res.set('Content-Type', image.type);
-
-    // Enviar a imagem no corpo da resposta
     return res.send(imgBuffer);
 
   } catch (error) {

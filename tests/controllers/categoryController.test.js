@@ -1,7 +1,6 @@
 const { Category } = require('../../src/config/sequelize.js');
 const categoryController = require('../../src/controllers/categoryController');
 
-// Mock do Express
 const mockRequest = (data = {}) => ({
   body: data.body || {},
   params: data.params || {},
@@ -17,9 +16,7 @@ const mockResponse = () => {
 
 jest.mock('../../src/config/sequelize.js');
 
-
 beforeEach(() => {
-  // Silencia os logs no terminal
   jest.spyOn(console, 'log').mockImplementation(() => {});
   jest.spyOn(console, 'error').mockImplementation(() => {});
 });
