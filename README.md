@@ -17,7 +17,7 @@ Projeto **CRUD**: API RESTful seguindo conceito **MVC** utilizando Stack **NodeJ
 
 Pacotes principais: **Express** responsável pela criação de rotas, Middleware **JWT** para persistência do token por 24 horas, mantendo a segurança e credêncial do usuário, ORM **Sequelize** para conexão com banco de dados relacional (**MySQL**) e por fim, **Jest** para realização de tests.
 
-## ✨ Requisitos
+## ✨ Funcionalidades
 
 - **Autenticação de Usuário**: Sistema de autenticação seguro baseado em JWT
 - **Gerenciamento de Produtos**: Operações CRUD completas para produtos
@@ -32,37 +32,7 @@ Pacotes principais: **Express** responsável pela criação de rotas, Middleware
 
 - Node.js v18+
 - mySQL
-- npm or yarn
-
-### Instalação
-
-```bash
-# Fazer o clone do repositório
-git clone https://github.com/jefferson-gbarbosa/projeto-backend-store
-
-# Navegar até o diretório do projeto
-cd projeto-backend-store
-
-# Instalar dependências
-npm install
-
-# Configurar variáveis ​​de ambiente
-cp .env.example .env
-
-# Configuração do banco de dados
-# Execute migrações
-
-npx sequelize-cli db:migrate
-
-# (Opcional) Dados iniciais
-npx sequelize-cli db:seed:all
-
-#Executando o aplicativo
-npm run dev
-
-# Modo de produção
-npm start 
-```
+- npm (ou outro gerenciador, mas o projeto usa `package-lock.json`)
 
 ### 🔧 Configuração
 Edite o arquivo **.env** com sua configuração:
@@ -79,12 +49,40 @@ DB_DIALECT=mysql
 PORT=3000
 
 # Autenticação
-JWT_SECRET=your_jwt_secret_key
+SECRET=your_jwt_secret_key
+```
+
+### Instalação
+
+```bash
+# Fazer o clone do repositório
+git clone https://github.com/jefferson-gbarbosa/projeto-backend-store
+
+# Navegar até o diretório do projeto
+cd projeto-backend-store
+
+# Instalar dependências
+npm install
+
+# Suba o banco de dados MySQL com Docker 
+docker compose up -d
+
+# Execute migrações
+npx sequelize-cli db:migrate
+
+# (Opcional) Dados iniciais
+npx sequelize-cli db:seed:all
+
+#Executando o aplicativo
+npm run dev
+
+# Modo de produção
+npm start 
 
 ```
-### 📚 API Documentation
+### 📚 API Documentation (Swagger)
 
-Acesse a documentação interativa da API em:
+Acesse a documentação interativa da API em: http://localhost:3000/api-docs/
 
 ### 🧪Teste
 Execute o conjunto de testes com:
@@ -93,7 +91,7 @@ Execute o conjunto de testes com:
   npm test
 ```
 
-## Testando API
+## Testando as requisições da API
 
   Utilize o [Insomnia](https://insomnia.rest/), [Postman](https://www.postman.com/), ou uma extensão do VS Code (REST client) para testar a API.
 
@@ -116,7 +114,7 @@ Execute o conjunto de testes com:
 
 ```bash
     project-root/
-          ├── src/ # Código fonte principal
+          ├── src/ 
           │     ├── config/ 
           │     ├── controllers/ 
           │     ├── middlewares/
@@ -124,9 +122,9 @@ Execute o conjunto de testes com:
           │     ├── models/
           │     ├── routes/
           │     └── server.js 
-          ├── tests/ # Testes automatizados
-          ├── .env.example # Template de variáveis
-          └── package.json # Dependências e scripts     
+          ├── tests/ 
+          ├── .env.example 
+          └── package.json    
 ```
 
 ### 🤝 Contribuição
@@ -137,9 +135,3 @@ Execute o conjunto de testes com:
   4. Envie para o branch (git push origin feature/AmazingFeature)
   5. Abra um Pull Request
 
-## Documentação da API (Swagger)
-
-Para acessar a documentação completa da API localmente, execute o servidor da aplicação e acesse no seu navegador o seguinte endereço:
-http://localhost:3000/api-docs/
-
-Essa página apresenta todos os endpoints disponíveis, seus métodos, parâmetros, exemplos de requisição e resposta, facilitando a compreensão e o uso da API.
