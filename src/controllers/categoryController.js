@@ -1,4 +1,5 @@
 const { op } = require('sequelize');
+const { Op } = require('sequelize');
 const { Category } = require('../config/sequelize');
 
 module.exports.search = async (req, res) => {

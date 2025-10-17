@@ -69,7 +69,6 @@ paths:
                   message:
                     type: string
                     example: Erro ao criar usuário
-
   /v1/user/token:
     post:
       tags: [Autenticação]
@@ -90,15 +89,32 @@ paths:
                   example: senha123
       responses:
         200:
-          description: Login bem-sucedido. Retorna um token de autenticação.
+          description: Login bem-sucedido. O token de autenticação é enviado em um cookie httpOnly.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; Path=/; HttpOnly; Secure
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  token:
+                  message:
                     type: string
-                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    example: Login realizado com sucesso
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      email:
+                        type: string
+                        example: joao@example.com
+                      role:
+                        type: string
+                        example: customer
         400:
           description: Credenciais inválidas.
           content:
@@ -119,7 +135,22 @@ paths:
                   message:
                     type: string
                     example: Erro ao fazer login
-
+  /v1/user/logout:
+    post:
+      tags: [Autenticação]
+      summary: Realiza logout do usuário.
+      description: Limpa o cookie de autenticação do usuário.
+      responses:
+        200:
+          description: Logout bem-sucedido.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged out successfully!
   /v1/user/{id}:
     get:
       tags: [Usuário]
@@ -171,7 +202,6 @@ paths:
                   message:
                     type: string
                     example: Erro interno do servidor
-
     put:
       tags: [Usuário]
       summary: Atualiza os dados do usuário.

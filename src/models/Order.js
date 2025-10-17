@@ -40,8 +40,45 @@ module.exports = (sequelize) => {
       sequelize,
       modelName: 'Order',
       tableName: 'orders',
-      timestamps: true,
-      underscored: true,
+      hooks: {
+        async afterCreate(order, options) {
+          const { OrderTracking } = sequelize.models;
+          await OrderTracking.create({
+            order_id: order.id,
+            status: order.status,
+            note: 'Pedido criado e aguardando confirmação',
+          });
+        },
+        async afterUpdate(order, options) {
+          if(order.changed('status')){
+            const { OrderTracking } = sequelize.models;
+            let note =`Status do pedido atualizado para ${order.status}`;
+            let location = null;
+            switch(order.status){
+              case 'confirmed':
+                note = 'Pedido confirmado pelo vendedor';
+                break;
+              case 'shipped':
+                note = 'Pedido enviado ao cliente';
+                location = 'Centro de Distribuição - Fortaleza/CE';
+                break;
+              case 'delivered':
+                note = 'Pedido entregue ao cliente';
+                location = 'Endereço do cliente';
+                break;
+              case 'canceled':
+                note = 'Pedido cancelado';
+                break;
+            }
+            await OrderTracking.create({
+              order_id: order.id,
+              status: order.status,
+              note,
+              location,
+            });
+          }
+        },
+      },
     }
   );
 
